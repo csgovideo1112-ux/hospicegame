@@ -15,53 +15,24 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #000;
+    background-color: #000; /* Черные поля вокруг игры, если экран шире/выше */
     font-family: 'Pinzelan', sans-serif;
     color: #fff;
-}
-
-/* --- Прелоадер --- */
-#preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #050505;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    transition: opacity 0.5s ease;
 }
 
-.loader-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-}
-
-.blood-spinner {
-    width: 60px;
-    height: 60px;
-    border: 5px solid #200;
-    border-top: 5px solid #8b0000;
-    border-radius: 50%;
-    margin-bottom: 20px;
-    animation: spin 1s linear infinite;
-}
-
-/* Стили для текста загрузки */
-.loader-content p {
-    font-size: 20px;
-    font-family: 'Pinzelan', sans-serif;
-    color: #fff;
-    letter-spacing: 2px;
-    text-shadow: 0 0 5px #ff0000;
+/* ИГРОВОЙ КОНТЕЙНЕР (Адаптивный 16:9 по центру экрана) */
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw; /* Пропорция 16:9 */
+    max-height: 100vh;
+    max-width: 177.78vh; /* Корректировка под ультраширокие мониторы */
+    background: #000;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
 }
 
 /* --- Лобби --- */
@@ -71,12 +42,6 @@ body, html {
     height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
 }
 
 /* Фон лобби */
@@ -130,32 +95,31 @@ body, html {
 /* Контейнер персонажа по центру */
 .character-container {
     position: absolute;
-    bottom: 10%; /* Положение на экране */
+    bottom: 10%; /* Положение над нижним краем игрового поля */
     left: 50%;
-    transform: translateX(-50%);
     z-index: 5;
     display: flex;
     justify-content: center;
     align-items: flex-end;
-}
-
-.player-char {
-    height: 60vh; 
-    object-fit: contain;
-    /* Применение анимации дыхания */
     animation: breathe 3s ease-in-out infinite;
     transform-origin: bottom center;
 }
 
-/* Анимация плавного дыхания */
+.player-char {
+    height: 60vh; 
+    max-height: 380px; /* Защита от чрезмерного растягивания персонажа */
+    object-fit: contain;
+}
+
+/* Исправленная анимация дыхания с сохранением центрирования по оси X */
 @keyframes breathe {
     0% {
-        transform: scale(1);
+        transform: translateX(-50%) scale(1);
     }
     50% {
-        transform: scale(1.03) scaleY(1.01); 
+        transform: translateX(-50%) scale(1.03) scaleY(1.01); 
     }
     100% {
-        transform: scale(1);
+        transform: translateX(-50%) scale(1);
     }
 }

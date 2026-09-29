@@ -2,26 +2,23 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 
 function activateFullscreen() {
-    if (tg.requestFullscreen) {
-        tg.requestFullscreen(); // Метод Mini Apps для скрытия рамок Telegram
-    } else if (tg.expand) {
-        tg.expand();
+    tg.expand();
+
+    if (tg.isVersionAtLeast('8.0')) {
+        if (!tg.isFullscreen) tg.requestFullscreen();
+        tg.lockOrientation(); // фиксирует текущую ориентацию
     }
-    
-    if (tg.requestOrientation) {
-        tg.requestOrientation('landscape'); // Принудительный горизонтальный режим
+    if (tg.isVersionAtLeast('7.7')) {
+        tg.disableVerticalSwipes(); // чтобы свайп вниз не закрывал игру
     }
 }
 
-// Запускаем сразу при инициализации
 activateFullscreen();
 
-// Отслеживание ошибок, если полноэкранный режим заблокирован устройством
 tg.onEvent('fullscreenFailed', (params) => {
-    console.log("Полноэкранный режим не запустился:", params.error);
+    console.log("Fullscreen не запустился:", params.error);
     tg.expand();
 });
-
 // Список картинок для фоновой предзагрузки в кэш (без блокировки экрана)
 const imagesToLoad = [
     'assets/bg/loading.webp',

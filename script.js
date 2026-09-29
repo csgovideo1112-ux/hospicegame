@@ -43,3 +43,27 @@ function preloadImagesBackground() {
 window.addEventListener('DOMContentLoaded', () => {
     preloadImagesBackground(); // Тихонько грузим ресурсы в фоне
 });
+// Логика панели одежды
+const clothesBtn = document.getElementById('clothesBtn');
+const appearancePanel = document.getElementById('appearancePanel');
+const appearanceClose = document.getElementById('appearanceClose');
+const playerChar = document.querySelector('.player-char');
+const options = document.querySelectorAll('.appearance-option');
+
+clothesBtn.addEventListener('click', () => {
+    appearancePanel.classList.toggle('open');
+});
+
+appearanceClose.addEventListener('click', () => {
+    appearancePanel.classList.remove('open');
+});
+
+options.forEach(option => {
+    option.addEventListener('click', () => {
+        // Меняем спрайт игрока
+        playerChar.src = option.dataset.sprite;
+        // Снимаем active со всех и ставим на выбранный
+        options.forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+    });
+});

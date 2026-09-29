@@ -16,22 +16,13 @@ function activateFullscreen() {
 // Запускаем сразу при инициализации
 activateFullscreen();
 
-
-// На всякий случай дублируем при полной загрузке DOM
-window.addEventListener('DOMContentLoaded', () => {
-    initFullscreenGame();
-    preloadImages(); // Ваша функция загрузки картинок, которая была в прошлом скрипте
-});
-
 // Добавляем отслеживание ошибок, если полноэкранный режим заблокирован устройством
 tg.onEvent('fullscreenFailed', (params) => {
     console.log("Полноэкранный режим не запустился:", params.error);
-    // В случае неудачи всё равно пробуем просто растянуть приложение
     tg.expand();
 });
 
-
-// --- Дальше идет ваш остальной неизмененный код (список картинок и логика прелоадера) ---
+// Список картинок для предзагрузки
 const imagesToLoad = [
     'assets/bg/loading.webp',
     'assets/bg/lobby-bg.webp',
@@ -44,37 +35,65 @@ const imagesToLoad = [
 ];
 
 let loadedCount = 0;
-const progressText = document.getElementById('progress');
-const preloader = document.getElementById('preloader');
-const lobby = document.getElementById('lobby');
 
 function preloadImages() {
+    const progressText = document.getElementById('progress');
+    
     if (imagesToLoad.length === 0) {
         showLobby();
         return;
     }
+    
     imagesToLoad.forEach((src) => {
         const img = new Image();
-        img.src = src;
-        img.onload = imageLoaded;
-        img.onerror = imageLoaded;
+        
+        img.onload = () => {
+            imageLoaded(progressText);
+        };
+        
+        img.onerror = () => {
+            console.warn(`Файл не найден на GitHub Pages: ${src}`);
+            imageLoaded(progressText); // Пропускаем ошибку, чтобы игра не висла на 0%
+        };
+        
+        // Срезаем жесткий кэш Телеграма на ПК с помощью метки времени
+        img.src = src + '?v=' + new Date().getTime();
     });
 }
 
-function imageLoaded() {
+function imageLoaded(progressText) {
     loadedCount++;
     const percentage = Math.floor((loadedCount / imagesToLoad.length) * 100);
-    progressText.innerText = `${percentage}%`;
+    
+    if (progressText) {
+        progressText.innerText = `${percentage}%`;
+    }
+    
     if (loadedCount === imagesToLoad.length) {
-        setTimeout(() => { showLobby(); }, 600);
+        setTimeout(() => { 
+            showLobby(); 
+        }, 600);
     }
 }
 
 function showLobby() {
-    preloader.style.opacity = '0';
-    setTimeout(() => {
-        preloader.style.display = 'none';
-        lobby.classList.remove('hidden');
-        lobby.style.opacity = '1';
-    }, 500);
+    const preloader = document.getElementById('preloader');
+    const lobby = document.getElementById('lobby');
+    
+    if (preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+            preloader.style.display = 'none';
+            if (lobby) {
+                lobby.classList.remove('hidden');
+                lobby.style.opacity = '1';
+            }
+        }, 500);
+    }
 }
+
+// Корректный вызов при полной загрузке структуры страницы
+window.addEventListener('DOMContentLoaded', () => {
+    activateFullscreen(); // Исправлено название функции!
+    preloadImages();
+});

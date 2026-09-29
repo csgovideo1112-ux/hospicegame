@@ -26,6 +26,30 @@
             <div class="character-container">
                 <img src="assets/sprites/player/p-default.webp" alt="Player" class="player-char">
             </div>
+            <!-- Кнопка одежды -->
+                <button class="clothes-btn" id="clothesBtn">
+                    <img src="assets/ui/clothes.webp" alt="Clothes" class="clothes-icon">
+                </button>
+                
+                <!-- Панель выбора внешности -->
+                <div class="appearance-panel" id="appearancePanel">
+                    <h2 class="appearance-title">Choose Appearance</h2>
+                    <div class="appearance-options">
+                        <div class="appearance-option active" data-sprite="assets/sprites/player/p-default.webp">
+                            <div class="head-preview" style="background-image: url('assets/sprites/player/p-default.webp')"></div>
+                            <span>Default</span>
+                        </div>
+                        <div class="appearance-option" data-sprite="assets/sprites/player/p-cut1.webp">
+                            <div class="head-preview" style="background-image: url('assets/sprites/player/p-cut1.webp')"></div>
+                            <span>Cut</span>
+                        </div>
+                        <div class="appearance-option" data-sprite="assets/sprites/player/p-short.webp">
+                            <div class="head-preview" style="background-image: url('assets/sprites/player/p-short.webp')"></div>
+                            <span>Short</span>
+                        </div>
+                    </div>
+                    <button class="appearance-close" id="appearanceClose">Close</button>
+                </div>
         </div>
 
     </div>

@@ -1,30 +1,21 @@
-// Инициализация Telegram Web App API
 const tg = window.Telegram.WebApp;
-
-// Сообщаем Telegram, что приложение готово
 tg.ready();
 
-function initFullscreenGame() {
-    // 1. Сначала расширяем окно на максимум (старый метод)
-    if (tg.expand) {
+function activateFullscreen() {
+    if (tg.requestFullscreen) {
+        tg.requestFullscreen(); // Метод Mini Apps 2.0 для скрытия всех рамок Telegram
+    } else if (tg.expand) {
         tg.expand();
     }
     
-    // 2. Активируем ИСТИННЫЙ полноэкранный режим Mini Apps 2.0 (без рамок)
-    if (tg.requestFullscreen) {
-        tg.requestFullscreen();
-    }
-
-    // 3. Жестко блокируем ориентацию экрана в горизонтальном режиме
-    if (tg.lockOrientation) {
-        tg.lockOrientation(); // Автоматически выберет landscape, если в манифесте/настройках это указано
-    } else if (tg.requestOrientation) {
-        tg.requestOrientation('landscape');
+    if (tg.requestOrientation) {
+        tg.requestOrientation('landscape'); // Принудительный горизонтальный режим
     }
 }
 
-// Запускаем инициализацию экрана немедленно
-initFullscreenGame();
+// Запускаем сразу при инициализации
+activateFullscreen();
+
 
 // На всякий случай дублируем при полной загрузке DOM
 window.addEventListener('DOMContentLoaded', () => {

@@ -42,4 +42,7 @@ function preloadImagesBackground() {
 // Вызов при полной загрузке структуры страницы
 window.addEventListener('DOMContentLoaded', () => {
     preloadImagesBackground(); // Тихонько грузим ресурсы в фоне
+setTimeout(() => {
+    alert(`platform: ${tg.platform}\nversion: ${tg.version}\nfullscreen: ${tg.isFullscreen}`);
+}, 1500);
 });

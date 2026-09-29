@@ -41,6 +41,5 @@ function preloadImagesBackground() {
 
 // Вызов при полной загрузке структуры страницы
 window.addEventListener('DOMContentLoaded', () => {
-    activateFullscreen();
     preloadImagesBackground(); // Тихонько грузим ресурсы в фоне
 });

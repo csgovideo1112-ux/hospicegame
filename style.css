@@ -95,31 +95,37 @@ body, html {
 /* Контейнер персонажа по центру */
 .character-container {
     position: absolute;
-    bottom: 10%; /* Положение над нижним краем игрового поля */
+    top: 55%; /* Центрируем по вертикали и опускаем чуть ниже центра (на 55% сверху) */
     left: 50%;
+    transform: translate(-50%, -50%); /* Идеальное центрирование точки опоры */
     z-index: 5;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
-    animation: breathe 3s ease-in-out infinite;
-    transform-origin: bottom center;
+    align-items: center;
+    /* Ослабленная анимация: 6 секунд вместо 3, еле заметное изменение масштаба */
+    animation: breathe 6s ease-in-out infinite; 
+    transform-origin: center bottom;
 }
 
 .player-char {
-    height: 60vh; 
-    max-height: 380px; /* Защита от чрезмерного растягивания персонажа */
+    /* Высота теперь зависит от ширины игрового контейнера (процент от 16:9), */
+    /* либо жестко ограничивается в пикселях. Никаких vh! */
+    height: 35vw; 
+    max-height: 480px; /* Слегка увеличили (было 380px) */
+    width: auto;
     object-fit: contain;
 }
 
-/* Исправленная анимация дыхания с сохранением центрирования по оси X */
+/* Еле заметная, плавная анимация дыхания */
 @keyframes breathe {
     0% {
-        transform: translateX(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
     50% {
-        transform: translateX(-50%) scale(1.03) scaleY(1.01); 
+        /* Изменение размера всего на 0.7% по ширине и 0.5% по высоте — анимация станет «живой», но еле видной */
+        transform: translate(-50%, -50%) scale(1.007, 1.005); 
     }
     100% {
-        transform: translateX(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
 }

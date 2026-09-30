@@ -67,3 +67,45 @@ options.forEach(option => {
         option.classList.add('active');
     });
 });
+
+const SOUND_PATH = 'assets/sounds/';
+
+const sfx = {
+    click: new Audio(SOUND_PATH + 'btn-click.mp3'),
+    paper: new Audio(SOUND_PATH + 'ui-paper.mp3')
+};
+Object.values(sfx).forEach(a => a.preload = 'auto');
+
+const music = new Audio(SOUND_PATH + 'lobby-music.mp3');
+music.loop = true;
+music.volume = 0.4; // громкость музыки от 0 до 1
+
+// Звук эффекта (клон, чтобы быстрые нажатия не обрывали друг друга)
+function playSfx(name) {
+    const s = sfx[name].cloneNode();
+    s.volume = 0.8;
+    s.play().catch(() => {});
+}
+
+// Музыка: браузеры и Telegram запрещают автозапуск звука без действия игрока,
+// поэтому пробуем сразу, а если не вышло, запускаем по первому касанию
+function startMusic() {
+    music.play().then(() => {
+        document.removeEventListener('pointerdown', startMusic);
+    }).catch(() => {});
+}
+startMusic();
+document.addEventListener('pointerdown', startMusic);
+
+// Звук на все кнопки: у кнопки одежды свой звук листка, у остальных обычный клик
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button, .appearance-option');
+    if (!btn) return;
+    playSfx(btn.id === 'clothesBtn' ? 'paper' : 'click');
+});
+
+// Пауза музыки, когда игра свёрнута или ушла в фон
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) music.pause();
+    else music.play().catch(() => {});
+});

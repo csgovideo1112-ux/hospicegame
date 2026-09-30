@@ -65,23 +65,25 @@ body, html {
     top: 0;
     left: 0;
     width: 100%;
+    aspect-ratio: 1542 / 65; /* ширина экрана / высота видимой части плашки */
+    overflow: hidden;        /* всё, что ниже линии, скрывается */
     z-index: 10;
-    pointer-events: none; /* прозрачная часть картинки не блокирует клики */
+    pointer-events: none;
 }
 
 .ui-bg {
     display: block;
     width: 100%;
-    height: auto;
+    height: auto;            /* картинка остаётся в полном размере, обрезает её header */
 }
 
-/* Кнопки лежат поверх плашки, в её верхней части */
+/* Кнопки по центру обрезанной плашки */
 .ui-nav {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 11.5%; /* высота плашки относительно всей картинки */
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,10 +125,9 @@ body, html {
 }
 
 .player-char {
-    /* Высота теперь зависит от ширины игрового контейнера (процент от 16:9), */
-    /* либо жестко ограничивается в пикселях. Никаких vh! */
-    height: 35vw; 
-    max-height: 480px; /* Слегка увеличили (было 380px) */
+    /* высота считается от размера игрового поля, а не от экрана:
+       0.326 ≈ 58% высоты кадра, как красный квадрат на твоём скрине */
+    height: calc(min(100vw, 177.78vh) * 0.326);
     width: auto;
     object-fit: contain;
 }
